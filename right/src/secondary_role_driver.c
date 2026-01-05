@@ -239,6 +239,11 @@ static secondary_role_state_t resolveCurrentKeyRoleIfDontKnowTimeout()
             KEY_TIMING2(dualKeyWasReleasedFirst, KeyTiming_RecordComment(resolutionKey, "PJ"));
             return SecondaryRoleState_Primary;
         }
+
+        if (actionRelease != NULL && Cfg.SecondaryRoles_AdvancedStrategySafetyMargin >= 0) {
+            sleepTimeoutStrategy(Cfg.SecondaryRoles_AdvancedStrategySafetyMargin);
+            return SecondaryRoleState_DontKnowYet;
+        }
     }
 
     bool triggerBehaviorsActive = Cfg.SecondaryRoles_AdvancedStrategyTriggeringEvent != SecondaryRoleTriggeringEvent_None;
