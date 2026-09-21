@@ -183,7 +183,7 @@ COMMAND = set oneShotTimeout <time in ms (INT)>
 COMMAND = set macroEngine.batchSize <number of commands to execute per one update cycle INT>
 COMMAND = set navigationModeAction.NAVIGATION_MODE_CUSTOM.DIRECTION ACTION
 COMMAND = set keymapAction.LAYERID.KEYID ACTION
-COMMAND = set chord[.LAYERID_BASIC] ACTION
+COMMAND = set chord[.LAYERID_BASIC] KEYID KEYID [KEYID]* ACTION
 COMMAND = set chordTimeout <ms, 0-255 (INT)> sets the chord activation window size
 COMMAND = set chordPriorIdleTime <ms, 0-65535 (INT)> sets the minimum dead time before a chord can trigger
 COMMAND = set chordLifetime { leadingKey | allKeys } sets how long a chord activation lasts
@@ -731,8 +731,10 @@ Key actions can be parametrized with macro arguments. These arguments can be exp
 
   - `set chord[.LAYERID_BASIC] ACTION` Configures a chord with an action.  If a layer is specified, the chord will be available when that layer is active, if not, it will be available on any layer.  The same chord can be defined for different actions for different layers, including the `any` layer.  If action is `none`, the chord is removed and the keys will work as individual keys if the chord is pressed, not as an empty action.
   - `set chordTimeout <ms, 0-255 (INT)>` sets the interval within which all keys of a chord must be pressed in order for the chord to be activated.
-  - `set chordPriorIdleTime <ms, 0-65535 (INT)>` sets a limit to how soon a chord can be activated after a key has been pressed.  This helps prevent accidental activations while typing rapidly.
+  - `set chordPriorIdleTime <ms, 0-65535 (INT)>` sets a limit to how soon a chord can be activated after a key has been pressed.  This helps prevent accidental activations while typing rapidly.  Chords do not prevent chord activations, so chords can still be doubletapped.
   - `set chordLifetime { leadingKey | allKeys }` sets how long a chord activation lasts.  With `leadingKey`, the chord is considered released when earliest key pressed in the activation is released, with `allKeys`, the chord is considered released when all keys in the chord is released.
+
+  Chords are reset every time the keymap is changed, so they are best set using the `$onKeymapChange` macro event.  A maximum of 64 chords can be defined at a time.
 
 - Secondary roles section configures the resolution strategy used for controlling both the native (agent-mapped) secondary roles and the`ifPrimary` and `ifSecondary` conditions.
 
